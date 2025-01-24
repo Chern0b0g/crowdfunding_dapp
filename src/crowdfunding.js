@@ -1,0 +1,738 @@
+import web3 from './web3';
+const address = '0xF8c8b08D286707B4fB3Bb4466906366B08A507cF';
+const abi = [
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "destroyContract",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBannedList",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getInvestorShares",
+		"outputs": [
+			{
+				"name": "campaignIds",
+				"type": "uint256[]"
+			},
+			{
+				"name": "shares",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"name": "pledgeCost",
+				"type": "uint256"
+			},
+			{
+				"name": "pledgesNeeded",
+				"type": "uint256"
+			}
+		],
+		"name": "createCampaign",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "refundAll",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalCampaignFees",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCompletedCampaigns",
+		"outputs": [
+			{
+				"name": "campaignIds",
+				"type": "uint256[]"
+			},
+			{
+				"name": "entrepreneurs",
+				"type": "address[]"
+			},
+			{
+				"name": "pledgeCosts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesNeeded",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesCounts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "fundsRaised",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelCampaign",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdrawFees",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			}
+		],
+		"name": "getName",
+		"outputs": [
+			{
+				"name": "title",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getContractBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"name": "_investor",
+				"type": "address"
+			}
+		],
+		"name": "getShares",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			}
+		],
+		"name": "getBackersAndPledgesOfSpecificCampaign",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "campaignFee",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "contractBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			}
+		],
+		"name": "completeCampaign",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "feePercentage",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "isDestroyed",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "entrepreneur",
+				"type": "address"
+			}
+		],
+		"name": "banEntrepreneur",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdrawContractBalance",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCancelledCampaigns",
+		"outputs": [
+			{
+				"name": "campaignIds",
+				"type": "uint256[]"
+			},
+			{
+				"name": "entrepreneurs",
+				"type": "address[]"
+			},
+			{
+				"name": "pledgeCosts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesNeeded",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesCounts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "fundsRaised",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getActiveCampaigns",
+		"outputs": [
+			{
+				"name": "campaignIds",
+				"type": "uint256[]"
+			},
+			{
+				"name": "entrepreneurs",
+				"type": "address[]"
+			},
+			{
+				"name": "pledgeCosts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesNeeded",
+				"type": "uint256[]"
+			},
+			{
+				"name": "pledgesCounts",
+				"type": "uint256[]"
+			},
+			{
+				"name": "fundsRaised",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "coOwner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCampaignDetails",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "calculateTotalFees",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getContractFees",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "campaignCounter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"name": "numPledges",
+				"type": "uint256"
+			}
+		],
+		"name": "pledge",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "entrepreneur",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "title",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "pledgeCost",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "pledgesNeeded",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "CampaignCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "backer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "PledgeMade",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "CampaignCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "entrepreneurShare",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "fees",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "CampaignCompleted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "backer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "campaignId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "RefundIssued",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "entrepreneur",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "EntrepreneurBanned",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "FeesWithdrawn",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "initiator",
+				"type": "address"
+			}
+		],
+		"name": "ContractDestroyed",
+		"type": "event"
+	}
+]
+const crowdfunding = new web3.eth.Contract(abi, address);
+export default crowdfunding;
