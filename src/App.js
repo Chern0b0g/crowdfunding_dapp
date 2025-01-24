@@ -88,6 +88,18 @@ class App extends Component {
             this.fetchCanceledCampaigns(); // Ενημέρωση των ακυρωμένων καμπανιών.
             this.fetchCompletedCampaigns(); // Ενημέρωση των ολοκληρωμένων καμπανιών.
           });
+          crowdfunding.events.CampaignCancelled().on('data', async (data) => {
+            this.fetchBalance(); // Ενημέρωση του υπολοίπου.
+            this.fetchActiveCampaigns(); // Ενημέρωση των ενεργών καμπανιών.
+            this.fetchCanceledCampaigns(); // Ενημέρωση των ακυρωμένων καμπανιών.
+            this.fetchCompletedCampaigns(); // Ενημέρωση των ολοκληρωμένων καμπανιών.
+          });
+          crowdfunding.events.CampaignCompleted().on('data', async (data) => {
+            this.fetchBalance(); // Ενημέρωση του υπολοίπου.
+            this.fetchActiveCampaigns(); // Ενημέρωση των ενεργών καμπανιών.
+            this.fetchCanceledCampaigns(); // Ενημέρωση των ακυρωμένων καμπανιών.
+            this.fetchCompletedCampaigns(); // Ενημέρωση των ολοκληρωμένων καμπανιών.
+          });
           this.fetchBalance(); // Ενημέρωση του υπολοίπου.
           // Ακρόαση αλλαγών στους λογαριασμούς του MetaMask.
           window.ethereum.on('accountsChanged', async (accounts) => {
